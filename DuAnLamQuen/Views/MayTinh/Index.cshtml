@@ -1,0 +1,27 @@
+﻿@model MayTinhModel
+<h3> Tính toán đơn giản </h3>
+<form asp-action="XuLy" method="post">
+	<div class="form-group">
+		<label>Nhap so 1</label>
+		<input asp-for="so1" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label>Nhap so 2</label>
+		<input asp-for="so2" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label>Phep tinh</label>
+		<select asp-for="pheptinh" class="form-control" />
+		<option value="+">Cong</option>
+		<option value="-">Tru</option>
+		<option value="*">Nhan</option>
+		<option value="/">Chia</option>
+		</select>
+	</div>
+	<button type="submit" class="btn btn-primary">Tinh</button>
+</form>
+
+@if (ViewBag.KQ != null)
+{
+	<h5>Ket Qua: @ViewBag.KQ</h5> 
+}

@@ -1,0 +1,12 @@
+﻿@model PersonViewModel
+
+<h3>Thong tin dang ky</h3>
+<hr />
+<ul>
+	<li>Ho ten: <b> @Model.FullName</b></li>
+	<li>Ngay sinh: <b> @Model.BirthDay.ToString("dd/MM/yyyy")</b></li>
+	<li>
+		Hinh dai dien: <br />
+		<img src="~/images/@Model.Picture" width="200px" />
+	</li>
+</ul>
