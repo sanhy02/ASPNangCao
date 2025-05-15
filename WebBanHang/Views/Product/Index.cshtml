@@ -1,0 +1,25 @@
+﻿@model List<Product>
+<h3>QUAN LY SAN PHAM</h3>
+
+<div class="text-end">
+	<a class="btn btn-susscess" asp-action="Add"> <i class="bi bi-plus-circle"></i>Add New</a>
+</div>
+
+<table>
+	<tr class="table table-bordered table-striped">
+		<th> Name </th>
+		<th> Price </th>
+	</tr>
+	@foreach(var item in Model)
+	{
+		<tr>
+			<td>@item.Name</td>
+			<td>@item.Price</td>
+			<td>@item.Category.Name</td>
+			<td>
+				<a class="btn btn-secondary" asp-action="Update" asp-route-id="@item.Id"> <i class="bi bi-pencil-square"></i> Edit </a>
+				<a class="btn btn-danger"  asp-action="Delete" asp-route-id="@item.Id"> <i class="bi bi-trash3"></i> Delete </a>
+			</td>
+		</tr>
+	}
+</table>
