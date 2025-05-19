@@ -10,6 +10,8 @@ namespace WebBanHang.Models
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Product> Products { set; get; }
+
+        //them du lieu cho cac thuc the
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //seed data to table Categories

@@ -9,6 +9,7 @@ namespace WebBanHang.Models
         [Required, StringLength(200)]
         public string Name { get; set; }
         public string Description { get; set; }
+        [Range (1,5000)]
         public double Price { get; set; }
         public int CategoryId { get; set; }
         //khai báo mối kết hợp 1-n
