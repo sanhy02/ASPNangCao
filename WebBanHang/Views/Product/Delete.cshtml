@@ -1,0 +1,8 @@
+﻿@model Product
+
+<form asp-action="DeleteConfirm" method="post">
+    <input asp-for="Id" type="hidden" />
+    <h4>Are u sure to delete name = @Model.Name?</h4>
+    <button type="submit" class="btn btn-danger">Ok</button>
+    <a asp-action="Index" class="btn btn-warning">Cancel</a>
+</form>

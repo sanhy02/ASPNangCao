@@ -148,14 +148,26 @@ namespace WebBanHang.Controllers
             return View();
         }
 
+
         //delete
         public IActionResult Delete(int id)
+        { 
+            var sp = _db.Products.Find(id);
+            if(sp == null)
+            {
+                return NotFound();
+            }
+            return View(sp);
+        }
+        public IActionResult DeleteConfirmed(int id)
         {
             //doc thong tin san pham can xoa
             var sp = _db.Products.Find(id);
+            if(sp == null)
+            {
+                return NotFound();
+            }
             //xoa khoi csdl
-            _db.Products.Remove(sp);
-            _db.SaveChanges();
             //xoa anh cu
             if (!string.IsNullOrEmpty(sp.ImageUrl))
             {
@@ -165,7 +177,9 @@ namespace WebBanHang.Controllers
                     System.IO.File.Delete(oldFilePath);
                 }
             }            //thong bao thao tac co the thanh cong hoac that bai
-            TempData["success"] = "Deleted";
+            _db.Products.Remove(sp);
+            _db.SaveChanges();
+            TempData["error"] = "Deleted";
             //dieu huong ve action Index
             return RedirectToAction("Index");
 
