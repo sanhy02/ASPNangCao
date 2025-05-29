@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using WebBanHang.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebBanHang.Controllers
 {
@@ -15,7 +16,7 @@ namespace WebBanHang.Controllers
         private ApplicationDbContext _db;
 
 
-        public HomeController(ApplicationDbContext db)
+        public HomeController( ApplicationDbContext db, ILogger<HomeController> logger)
         {
             _logger = logger;
             _db = db;
@@ -44,7 +45,7 @@ namespace WebBanHang.Controllers
         {
             return View();
         }
-
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
