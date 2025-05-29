@@ -14,7 +14,8 @@ namespace WebBanHang.Controllers
         private readonly ILogger<HomeController> _logger;
         private ApplicationDbContext _db;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext db)
+
+        public HomeController(ApplicationDbContext db)
         {
             _logger = logger;
             _db = db;
