@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using WebBanHang.Models;
@@ -25,6 +26,7 @@ namespace WebBanHang.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private RoleManager<IdentityRole> _roleManager;
+        private object roles;
 
         public RegisterModel(
             UserManager<KhachHang> userManager,
@@ -47,6 +49,7 @@ namespace WebBanHang.Areas.Identity.Pages.Account
         public string ReturnUrl { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
+        public List<SelectListItem> RoleList { get; private set; }
 
         public class InputModel
         {
@@ -72,15 +75,25 @@ namespace WebBanHang.Areas.Identity.Pages.Account
             public DateTime NgaySinh { get; set; }
             [Required(ErrorMessage = "Chua nhap so dien thoai")]
             public string DienThoai { get; set; }
+            public string Role { get; set; } 
+            public IEnumerable<SelectListItem> RoleList { get; set; }
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if (!_roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole("Admin")).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole("Customer")).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole("Employee")).GetAwaiter().GetResult();
+            }
+            //tao model inut với các trường cần thiết
             //tao role
-            _roleManager.CreateAsync(new IdentityRole("Admin")).GetAwaiter().GetResult();
-            _roleManager.CreateAsync(new IdentityRole("Customer")).GetAwaiter().GetResult();
-            _roleManager.CreateAsync(new IdentityRole("Employee")).GetAwaiter().GetResult();
+            Input = new InputModel()
+            {
+                RoleList = _roleManager.Roles.Select(x => new SelectListItem { Value = x.Name, Text = x.Name })
+            };
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -96,7 +109,15 @@ namespace WebBanHang.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
+                    //gan role cho user moi
+                    if (!string.IsNullOrEmpty(Input.Role) && await _roleManager.RoleExistsAsync(Input.Role))
+                    {
+                        await _userManager.AddToRoleAsync(user, Input.Role);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, ShareData.Role_Customer); // Default role if none selected
+                    }
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

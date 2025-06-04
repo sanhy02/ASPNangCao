@@ -1,0 +1,91 @@
+﻿<div class="row">
+    <div id=" category-list" class="col-md-3">
+        <h3>CATEGORY LIST</h3>
+        <ul class="list-group">
+            @foreach (var c in (List<CategoryViewModel>)ViewBag.DSLOAI)
+            {
+                <a asp-action="Index" asp-route-catid="@c.Id" data-catid="@c.Id" class=" catitem list-group-item d-flex justify-content-between align-items-center">
+                    @c.Name
+                    <span class="badge bg-primary rounded-pill">@c.TotalProduct</span>
+                </a>    
+            }
+        </ul>
+    </div>
+        <div id="product-list" class="col-md-9">
+            <h3>PRODUCT LIST OF</h3>
+        <style>
+            .product-card {
+                min-height: 420px; /* Điều chỉnh theo nội dung thực tế */
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .product-img {
+                height: 200px;
+                object-fit: contain; /* Hiển thị toàn bộ hình ảnh, không bị cắt */
+                width: 100%;
+                border-bottom: 1px solid #eee;
+                display: block;
+                background: #fff; /* Nền trắng cho vùng thừa */
+            }
+        </style>
+
+        <div class="row">
+            @foreach (var p in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card mb-3 product-card">
+                        <h3 class="card-header">@p.Name</h3>
+
+                        @if (!string.IsNullOrEmpty(p.ImageUrl))
+                        {
+                            <img src="/@p.ImageUrl" class="product-img" />
+                        }
+                        else
+                        {
+                            <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none product-img" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false">
+                                <rect width="100%" height="100%" fill="#868e96"></rect>
+                                <text x="50%" y="50%" fill="#dee2e6" dy=".3em" text-anchor="middle">Image cap</text>
+                            </svg>
+                        }
+
+                        <div class="card-body">
+                            <h5 class="card-title">Price: <span>@p.Price</span></h5>
+                        </div>
+
+                        <div class="card-body">
+                            <a href="#" class="card-link">Detail</a>
+                            <a href="#" class="card-link">Add to card</a>
+                        </div>
+
+                        <div class="card-footer text-muted">
+                            2 days ago
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        </div>
+</div>
+
+@section Scripts {
+    <script>
+        //xu ly su kien khi click
+        $(".catitem").click(function (evt){
+            evt.preventDefault();
+            let maloai = $(this).data("catid");
+            $(".catitem").removeClass("active");
+            $(this).addClass("active");
+            //goi phuong thuc Funtion voi Ajax voi phuong thuc Jquery
+            $.ajax ({
+                url:"/Customer/Product/LoadPartial",
+                data: {catid: maloai},
+                success: function(data){
+                    $("#product-list").html(data);
+                }
+            })
+        })
+    </script>
+}

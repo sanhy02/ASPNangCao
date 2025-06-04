@@ -30,7 +30,7 @@
 
         let loadPage = (page) => {
             $.ajax({
-                url: "/Home/LoadMore",
+                url: "/Customer/Home/LoadMore",
                 data: { page: page },
                 success: function (data) {
                     if (!data || data.trim() === "") {

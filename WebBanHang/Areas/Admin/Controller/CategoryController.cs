@@ -1,9 +1,12 @@
 ﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebBanHang.Models;
 
-namespace WebBanHang.Controllers
+namespace WebBanHang.Areas.Admin.Controllers
 {
+    [Area ("Admin")]
+    [Authorize(Roles = ShareData.Role_Admin)] //Chỉ cho phép người dùng có vai trò Admin truy cập vào các action trong controller này.
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _db;
